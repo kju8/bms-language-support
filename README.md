@@ -3,7 +3,7 @@
 
 ## Features
 
-- BMS Syntax Highlight
+- BMS Syntax Highlight/Hover Infomation
   - Support Indent
   - Support Command
     - RANDOM/IF Block
@@ -31,11 +31,20 @@
   - ``#OPTION``, ``#CHANGEOPTION``, ``#WAVCMD``, ``#EXWAV``, ``#CDDA``, ``#MIDIFILE``, ``#EXBMP``, ``#BGA``, ``#@BGA``, ``#POORBGA``, ``#SWBGA``, ``#ARGB``, ``#VIDEOFILE``, ``#VIDEOf/s``, ``#VIDEOCOLORS``, ``#VIDEODLY``, ``#MOVIE``, ``#SEEK``, ``#ExtChr``, ``#MATERIALSWAV``, ``#MATERIALSBMP``, ``#DIVIDEPROP``, ``#CHARSET``, etc...
 - Add Snippet
 - Add Linter
-- Add Hover Provider
 - Preview (!?)
 - Language Support
 
 ## Release Notes
+
+### 0.1.1
+
+- Fix README
+
+### 0.1.0
+
+- Add Hover Infomation
+- Fix ``#BPMxx``
+- Add ``#LNMODE`` Support
 
 ### 0.0.1
 
