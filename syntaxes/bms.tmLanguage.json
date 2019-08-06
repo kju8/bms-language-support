@@ -1,0 +1,1417 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Be-Music Script",
+	"patterns": [
+		{"include": "#top-command"}
+	],
+	"repository": {
+		"top-command": {
+			"patterns":[
+				{"include": "#comment"},
+				{"include": "#random"},
+				{"include": "#switch"},
+				{"include": "#command"},
+				{"include": "#command-invalid"}
+			]
+		},
+		"comment": {
+			"patterns": [
+				{
+					"name": "comment.line.nothash",
+					"match": "^\\s*[^\\s#].*$"
+				},
+				{
+					"name": "comment.line.empty",
+					"match": "^\\s*$"
+				}
+			]
+		},
+		"random": {
+			"patterns": [
+				{
+					"name": "meta.control.bms.random",
+					"begin": "(?i)^\\s*(?=#(?:RANDOM|SETRANDOM))",
+					"end": "(?i)^\\s*(?:((#)ENDRANDOM)(.+)?)",
+					"endCaptures":{
+						"1": {
+							"name": "keyword.control.bms.endrandom"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					},
+					"patterns": [
+						{"include": "#comment"},
+						{
+							"begin": "(?i)\\G((#)(RANDOM|SETRANDOM))",
+							"beginCaptures": {
+								"1": {
+									"name": "keyword.control.bms.random"
+								},
+								"2": {
+									"name": "punctuation.command.hash"
+								}
+							},
+							"end": "$",
+							"patterns": [
+								{"include": "#number"}
+							]
+						},
+						{"include": "#if"},
+						{"include": "#command-invalid"}
+					]
+				}
+			]
+		},
+		"if": {
+			"patterns": [
+				{
+					"name": "meta.control.bms.if",
+					"begin": "(?i)^\\s*(?=#IF)",
+					"end": "(?i)^\\s*((#)ENDIF)(.+)?$",
+					"endCaptures":{
+						"1": {
+							"name": "keyword.control.bms.endif"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					},
+					"patterns": [
+						{"include": "#comment"},
+						{
+							"begin": "(?i)\\G((#)IF)",
+							"beginCaptures": {
+								"1": {
+									"name": "keyword.control.bms.random"
+								},
+								"2": {
+									"name": "punctuation.command.hash"
+								}
+							},
+							"end": "$",
+							"patterns": [
+								{"include": "#number"}
+							]
+						},
+						{"include": "#if-internal"},
+						{"include": "#top-command"}
+					]
+				}
+			]
+		},
+		"if-internal": {
+			"patterns": [
+				{
+					"begin": "(?i)^\\s*((#)ELSEIF)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.elseif"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"match": "(?i)^\\s*((#)ELSE)(.+)?$",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.bms.else"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					}
+				}
+			]
+		},
+		"switch": {
+			"patterns": [
+				{
+					"name": "meta.control.bms.switch",
+					"begin": "(?i)^\\s*(?=#(?:SWITCH|SETSWITCH))",
+					"end": "(?i)^\\s*((#)ENDSW)(.+)?$",
+					"endCaptures":{
+						"1": {
+							"name": "keyword.control.bms.endsw"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					},
+					"patterns": [
+						{"include": "#comment"},
+						{
+							"begin": "(?i)\\G((#)(SWITCH|SETSWITCH))",
+							"beginCaptures": {
+								"1": {
+									"name": "keyword.control.bms.switch"
+								},
+								"2": {
+									"name": "punctuation.command.hash"
+								}
+							},
+							"end": "$",
+							"patterns": [
+								{"include": "#number"}
+							]
+						},
+						{"include": "#switch-internal"},
+						{"include": "#command-invalid"}
+					]
+				}
+			]
+		},
+		"switch-internal": {
+			"patterns": [
+				{
+					"begin": "(?i)^\\s*((#)CASE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.case"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"match": "(?i)^\\s*((#)SKIP)(.+)?$",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.bms.skip"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					}
+				},
+				{
+					"match": "(?i)^\\s*((#)DEF)(.+)?$",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.bms.swdefault"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "invalid.illegal.aftercommand"
+						}
+					}
+				}
+			]
+		},
+		"command": {
+			"patterns": [
+				{
+					"include": "#definition"
+				},
+				{
+					"include": "#placement"
+				}
+			]
+		},
+		"definition": {
+			"patterns": [
+				{
+					"begin": "(?i)^\\s*((#)PLAYER)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.player"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#player"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)RANK)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.rank"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#rank"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)DEFEXRANK)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.defexrank"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)EXRANK((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.exrank"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)TOTAL)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.total"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)VOLWAV)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.volwav"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)STAGEFILE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.stagefile"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BANNER)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.banner"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BACKBMP)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.backbmp"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)CHARFILE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.charfile"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)PLAYLEVEL)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.playlevel"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)DIFFICULTY)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.difficulty"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#difficulty"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)TITLE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.title"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)SUBTITLE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.subtitle"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)ARTIST)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.artist"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)SUBARTIST)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.subartist"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)MAKER)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.maker"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)GENRE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.genre"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)COMMENT)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.comment"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)(TEXT|SONG)((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.text"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)TEXT00)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.text.misstext"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)(BPM|EXBPM)((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.exbpm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BPM)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.bpm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BASEBPM)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.basebpm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)STOP((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.stop"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)STP)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.stop"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#bemania-stp"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)LNTYPE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.lntype"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#lntype"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)LNOBJ)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.lnobj"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#defobj"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)LNMODE)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.lnmode"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"match": "(?i)^\\s*((#)OCT/FP)$",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.bms.octfp"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					}
+				},
+				{
+					"begin": "(?i)^\\s*((#)WAV((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.wav"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)WAV00)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.text.bombwav"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BMP((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.bpm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)BMP00)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.text.missbmp"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#strings"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)SCROLL((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.scroll"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"begin": "(?i)^\\s*((#)SPEED((?!00)[0-9A-Z][0-9A-Z]))",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.bms.speed"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.defnumber"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				}
+			]
+		},
+		"strings": {
+			"patterns":[
+				{
+					"match": "\\G\\s+(.*)$",
+					"captures": {
+						"1": {
+							"name": "string.bms"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notstrings"
+						}
+					}
+				}
+			]
+		},
+		"number": {
+			"patterns":[
+				{
+					"match": "\\G\\s+(-?[0-9]+|[0-9]*\\.[0-9]+)$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notnumeric"
+						}
+					}
+				}
+			]
+		},
+		"defobj": {
+			"patterns":[
+				{
+					"match": "\\G\\s+((?!00)[0-9A-Z][0-9A-Z])$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric.defobj"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notobject"
+						}
+					}
+				}
+			]
+		},
+		"player": {
+			"patterns":[
+				{
+					"match": "\\G\\s+([1-4])$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric.player"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notplayer"
+						}
+					}
+				}
+			]
+		},
+		"rank": {
+			"patterns":[
+				{
+					"match": "\\G\\s+([0-3])$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric.rank"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s+(4)$",
+					"captures": {
+						"1": {
+							"name": "constant.character.veryeasy"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notrank"
+						}
+					}
+				}
+			]
+		},
+		"difficulty": {
+			"patterns":[
+				{
+					"match": "\\G\\s+([1-5])$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric.difficulty"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notdifficulty"
+						}
+					}
+				}
+			]
+		},
+		"bemania-stp":{
+			"patterns": [
+				{
+					"begin": "\\G\\s+([0-9]{0,3})(?:(\\.)([0-9]{0,3}))?",
+					"beginCaptures": {
+						"1": {
+							"name": "constant.numeric.stp.measure"
+						},
+						"2": {
+							"name": "punctuation.command.stpdot"
+						},
+						"3": {
+							"name": "constant.numeric.stp.position"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#number"}
+					]
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notbemania"
+						}
+					}
+				}
+			]
+		},
+		"lntype": {
+			"patterns":[
+				{
+					"match": "\\G\\s+([12])$",
+					"captures": {
+						"1": {
+							"name": "constant.numeric.lntype"
+						}
+					}
+				},
+				{
+					"match": "\\G\\s*(.*)$",
+					"captures": {
+						"1": {
+							"name": "invalid.illegal.notlntype"
+						}
+					}
+				}
+			]
+		},
+		"placement": {
+			"patterns": [
+				{
+					"begin": "^\\s*((#)([0-9]{3})(01))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.bgm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.bgm"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"match": "^\\s*((#)([0-9]{3})(02))(?:(\\:)([0-9]*|[0-9]*(?:\\.[0-9]*)?))?$",
+					"captures": {
+						"1": {
+							"name": "meta.tag.measurelength"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "constant.language.measurelength"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						},
+						"6": {
+							"name": "constant.numeric"
+						}
+					}
+				},
+				{
+					"match": "^\\s*((#)([0-9]{3})(03))(\\:([0-9A-Z]{0,2}))?$",
+					"captures": {
+						"1": {
+							"name": "meta.tag.bpmchange"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "constant.language.bpmchange"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						},
+						"6": {
+							"name": "constant.character.object"
+						}
+					}
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(08))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.exbpm"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.exbpm"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(04|06|07|0A))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.bmp"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.bmp"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(09))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.stop"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.stop"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(1[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player1.note"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player1.note"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(3[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player1.invisible"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player1.invisible"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(5[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player1.long"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player1.long"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(D[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player1.mine"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player1.mine"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(2[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player2.note"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player2.note"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(4[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player2.invisible"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player2.invisible"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(6[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player2.long"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player2.long"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(E[1-9]))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.player2.mine"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.player2.mine"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(99))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.text"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.text"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(A0))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.exrank"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.exrank"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				}
+			]
+		},
+		"placement-positions": {
+			"patterns": [
+				{
+					"begin": "\\G(00)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.notplace"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "(?i)\\G([0-9A-Z]{2})",
+					"beginCaptures": {
+						"1": {
+							"name": "constant.character.object"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "\\G(.{1,2})",
+					"beginCaptures": {
+						"1": {
+							"name": "invalid.illegal.notobject"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				}
+			]
+		},
+		"command-invalid": {
+			"patterns": [
+				{
+					"name": "invalid.illegal.command",
+					"match": "^.*$"
+				}
+			]
+		}
+	},
+	"scopeName": "text.bms"
+}
