@@ -2,7 +2,10 @@ import * as nls from 'vscode-nls';
 export let localize = nls.loadMessageBundle();
 
 import stripIndent = require('strip-indent');
-import { localizeTempKey , bmsCommand } from './types';
+import { localizeTempKey , descriptionObj , bmsCommand } from './types';
+
+import * as url from 'url';
+import * as path from 'path';
 
 function localizeTemp(strings: TemplateStringsArray, ...keys: localizeTempKey[]) {
 	return (function (defaultStrings: {[_key: string]: string}) {
@@ -18,12 +21,12 @@ function localizeTemp(strings: TemplateStringsArray, ...keys: localizeTempKey[])
 				resultFormatStrings[resultFormatStrings.length - 1].push(value, strings[i + 1]);
 			}
 		});
-		return (function (...args: string[]) : string{
+		return (function (obj: descriptionObj ,...args: string[]) : string{
 			let result: string[] = [resultFormatStrings[0].join('')];
 			for (let i = 1; i < resultFormatStrings.length; i++) {
 				let resultFormatCallbackSingle = resultFormatCallback[i - 1];
 				if (typeof resultFormatCallbackSingle === "function") {
-					result.push(resultFormatCallbackSingle(...args), resultFormatStrings[i].join(''));
+					result.push(resultFormatCallbackSingle(obj, ...args), resultFormatStrings[i].join(''));
 				}
 			}
 			return stripIndent(result.join('')).replace(/\\n/g, "\n");
@@ -39,10 +42,10 @@ __definitions.set(/#player/i, {
 	localizeTemp`
 	${'definition.player'}
 
-	1. ${(function(i){return i=="1" ?  "**" : "";})}Single Play${(function(i){return i=="1" ?  "**" : "";})}
-	2. ${(function(i){return i=="2" ?  "**" : "";})}Couple Play${(function(i){return i=="2" ?  "**" : "";})}
-	3. ${(function(i){return i=="3" ?  "**" : "";})}Double Play${(function(i){return i=="3" ?  "**" : "";})}
-	4. ${(function(i){return i=="4" ?  "**" : "";})}Battle Play${(function(i){return i=="4" ?  "**" : "";})}
+	1. ${(function(o,i){return i=="1" ?  "**" : "";})}Single Play${(function(o,i){return i=="1" ?  "**" : "";})}
+	2. ${(function(o,i){return i=="2" ?  "**" : "";})}Couple Play${(function(o,i){return i=="2" ?  "**" : "";})}
+	3. ${(function(o,i){return i=="3" ?  "**" : "";})}Double Play${(function(o,i){return i=="3" ?  "**" : "";})}
+	4. ${(function(o,i){return i=="4" ?  "**" : "";})}Battle Play${(function(o,i){return i=="4" ?  "**" : "";})}
 
 	${'definition.player.caution'}
 	`,
@@ -62,11 +65,11 @@ __definitions.set(/#rank/i, {
 	localizeTemp`
 	${'definition.rank'}
 
-	0. ${(function(i){return i=="0" ?  "**" : "";})}Very Hard${(function(i){return i=="0" ?  "**" : "";})}
-	1. ${(function(i){return i=="1" ?  "**" : "";})}Hard${(function(i){return i=="1" ?  "**" : "";})}
-	2. ${(function(i){return i=="2" ?  "**" : "";})}Normal${(function(i){return i=="2" ?  "**" : "";})}
-	3. ${(function(i){return i=="3" ?  "**" : "";})}Easy${(function(i){return i=="3" ?  "**" : "";})}
-	4. ${(function(i){return i=="4" ?  "**" : "";})}Very Easy${(function(i){return i=="4" ?  "**" : "";})}
+	0. ${(function(o,i){return i=="0" ?  "**" : "";})}Very Hard${(function(o,i){return i=="0" ?  "**" : "";})}
+	1. ${(function(o,i){return i=="1" ?  "**" : "";})}Hard${(function(o,i){return i=="1" ?  "**" : "";})}
+	2. ${(function(o,i){return i=="2" ?  "**" : "";})}Normal${(function(o,i){return i=="2" ?  "**" : "";})}
+	3. ${(function(o,i){return i=="3" ?  "**" : "";})}Easy${(function(o,i){return i=="3" ?  "**" : "";})}
+	4. ${(function(o,i){return i=="4" ?  "**" : "";})}Very Easy${(function(o,i){return i=="4" ?  "**" : "";})}
 	`,
 	defaultStrings: {
 		"definition.rank": "判定幅を指定します。大きな数字ほど広く、簡単になります。",
@@ -255,11 +258,11 @@ __definitions.set(/#DIFFICULTY/i, {
 	localizeTemp`
 	${'definition.difficulty'}
 
-	1. ${(function(i){return i=="1" ?  "**" : ""; })}EASY${(function(i){return i=="1" ?  "**" : ""; })}
-	2. ${(function(i){return i=="2" ?  "**" : ""; })}NORMAL${(function(i){return i=="2" ?  "**" : ""; })}
-	3. ${(function(i){return i=="3" ?  "**" : ""; })}HYPER${(function(i){return i=="3" ?  "**" : ""; })}
-	4. ${(function(i){return i=="4" ?  "**" : ""; })}ANOTHER${(function(i){return i=="4" ?  "**" : ""; })}
-	5. ${(function(i){return i=="5" ?  "**" : ""; })}INSANE${(function(i){return i=="5" ?  "**" : ""; })}
+	1. ${(function(o,i){return i=="1" ?  "**" : ""; })}EASY${(function(o,i){return i=="1" ?  "**" : ""; })}
+	2. ${(function(o,i){return i=="2" ?  "**" : ""; })}NORMAL${(function(o,i){return i=="2" ?  "**" : ""; })}
+	3. ${(function(o,i){return i=="3" ?  "**" : ""; })}HYPER${(function(o,i){return i=="3" ?  "**" : ""; })}
+	4. ${(function(o,i){return i=="4" ?  "**" : ""; })}ANOTHER${(function(o,i){return i=="4" ?  "**" : ""; })}
+	5. ${(function(o,i){return i=="5" ?  "**" : ""; })}INSANE${(function(o,i){return i=="5" ?  "**" : ""; })}
 	`,
 	"defaultStrings": {
 		"definition.difficulty": "楽曲内での難易度種別を指定します。"

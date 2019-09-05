@@ -22,7 +22,7 @@
   - ``04``(BGA Base), ``06``(BGA Missed), ``07``(BGA Layer), ``0A``(BGA Layer2)
   - ``11-19``(1P Notes), ``21-29``(2P Notes)
   - ``31-39``(1P Invisible), ``41-49``(2P Invisible)
-  - ``51-39``(1P Longnotes), ``61-49``(2P Longnotes)
+  - ``51-59``(1P Longnotes), ``61-69``(2P Longnotes)
   - ``D1-D9``(1P Mines), ``E1-E9``(2P Mines)
   - ``99``(TEXT)
   - ``A0``(JUDGE)
@@ -38,6 +38,11 @@
 - Language Support
 
 ## Release Notes
+
+### 0.1.2
+
+- Fix 03 Channel Error
+- Fix README (thx [hitkey](https://hitkey.nekokan.dyndns.info/diary1908.php#D190807))
 
 ### 0.1.1
 

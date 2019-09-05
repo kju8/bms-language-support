@@ -1028,8 +1028,8 @@
 					}
 				},
 				{
-					"match": "^\\s*((#)([0-9]{3})(03))(\\:([0-9A-Z]{0,2}))?$",
-					"captures": {
+					"begin": "^\\s*((#)([0-9]{3})(01))(?:(\\:)|$)",
+					"beginCaptures": {
 						"1": {
 							"name": "meta.tag.bpmchange"
 						},
@@ -1044,11 +1044,12 @@
 						},
 						"5": {
 							"name": "punctuation.command.colon"
-						},
-						"6": {
-							"name": "constant.character.object"
 						}
-					}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
 				},
 				{
 					"begin": "^\\s*((#)([0-9]{3})(08))(?:(\\:)|$)",
