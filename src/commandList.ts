@@ -649,7 +649,7 @@ __definitions.set(/#BMP00/i, {
 	}]
 });
 __definitions.set(/#SCROLL(?!00)[0-9A-Z]{0,2}/i, {
-	title: "#SCROLL[01-ZZ]_ _number_",
+	title: "#SCROLL_[01-ZZ]_ _number_",
 	support: {"lr2": false, "nanasi": false, "beatoraja": true, "qms": false, "bemuse": true},
 	channel: "SC",
 	descriptionTemp:
@@ -657,7 +657,7 @@ __definitions.set(/#SCROLL(?!00)[0-9A-Z]{0,2}/i, {
 	${'definition.scroll'}
 	`,
 	defaultStrings: {
-		"definition.scroll": "オブジェクトの位置やテンポを変更せずに、図表とスクロール速度を伸縮することができるオブジェクトを定義します。"
+		"definition.scroll": "オブジェクトの論理的位置やテンポを変更せずに、表示上の位置とスクロール速度を伸縮することができるオブジェクトを定義します。"
 	},
 	link: [{
 		"name": localize("definition.scroll.link.name", "Bemuse's BMS Extensions"),
@@ -665,7 +665,7 @@ __definitions.set(/#SCROLL(?!00)[0-9A-Z]{0,2}/i, {
 	}]
 });
 __definitions.set(/#SPEED(?!00)[0-9A-Z]{0,2}/i, {
-	title: "#SPEED[01-ZZ]_ _number_",
+	title: "#SPEED_[01-ZZ]_ _number_",
 	support: {"lr2": false, "nanasi": false, "beatoraja": false, "qms": false, "bemuse": true},
 	channel: "SP",
 	descriptionTemp:

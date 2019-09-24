@@ -26,6 +26,7 @@
   - ``D1-D9``(1P Mines), ``E1-E9``(2P Mines)
   - ``99``(TEXT)
   - ``A0``(JUDGE)
+  - ``SC``(SCROLL), ``SP``(SPEED)
 
 ## TO-DO
 
@@ -41,6 +42,8 @@
 
 ### 0.1.2
 
+- Add SC&SP Channel
+- Fix SCROLL&SPEED Hover
 - Fix 03 Channel Error
 - Fix README (thx [hitkey](https://hitkey.nekokan.dyndns.info/diary1908.php#D190807))
 

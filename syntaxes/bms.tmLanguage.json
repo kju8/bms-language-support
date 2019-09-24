@@ -1362,6 +1362,54 @@
 					"patterns": [
 						{"include": "#placement-positions"}
 					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(SC))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.scroll"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.scroll"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
+				},
+				{
+					"begin": "^\\s*((#)([0-9]{3})(SP))(?:(\\:)|$)",
+					"beginCaptures": {
+						"1": {
+							"name": "meta.tag.speed"
+						},
+						"2": {
+							"name": "punctuation.command.hash"
+						},
+						"3": {
+							"name": "variable.parameter.measure"
+						},
+						"4": {
+							"name": "storage.type.speed"
+						},
+						"5": {
+							"name": "punctuation.command.colon"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{"include": "#placement-positions"}
+					]
 				}
 			]
 		},
