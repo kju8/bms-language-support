@@ -40,6 +40,10 @@
 
 ## Release Notes
 
+### 0.1.3
+
+- Re-Fix 03 Channel Error
+
 ### 0.1.2
 
 - Add SC&SP Channel
