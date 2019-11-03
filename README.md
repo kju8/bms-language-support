@@ -1,6 +1,5 @@
 # bms-language-support
 
-
 ## Features
 
 - Syntax Highlight
@@ -36,7 +35,7 @@
 - Add Snippet
 - Add Linter
 - Preview (!?)
-- Language Support
+- English Support
 
 ## Release Notes
 
@@ -66,4 +65,5 @@
 - Initial release
 
 ## Thanks
+
 [BMS command memo](https://hitkey.nekokan.dyndns.info/cmds.htm) [(Japanese Version)](https://hitkey.nekokan.dyndns.info/cmdsJP.htm)
