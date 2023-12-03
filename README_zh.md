@@ -7,11 +7,11 @@
 - 支持缩进
 - 支持命令
   - RANDOM/IF Block
-    (``#RANDOM``, ``#SETRANDOM``, ``#ENDRANDOM``, ``#IF``, ``#ELSEIF``, ``#ELSE``, ``#IF``)
+    (``#RANDOM``， ``#SETRANDOM``， ``#ENDRANDOM``， ``#IF``， ``#ELSEIF``， ``#ELSE``， ``#IF``)
   - SWITCH Block
-    (``#SWITCH``, ``#SETSWITCH``, ``#ENDSW``, ``#CASE``, ``#SKIP``, ``#DEF``)
+    (``#SWITCH``， ``#SETSWITCH``， ``#ENDSW``， ``#CASE``， ``#SKIP``， ``#DEF``)
   - Major&Minor Definition Commands
-    ``#PLAYER``, ``#RANK``, ``#DEFEXRANK``, ``#EXRANK``, ``#TOTAL``, ``#VOLWAV``, ``STAGEFILE``, ``#BANNER``, ``#BACKBMP``,``#CHARFILE``, ``#PLAYLEVEL``, ``#DIFFICULTY``, ``#TITLE``, ``#SUBTITLE``, ``#ARTIST``, ``#SUBARTIST``, ``#MAKER``, ``#GENRE``, ``#COMMENT``, ``#TEXT``, ``#SONG``, ``#BPM``, ``#EXBPM``, ``#BASEBPM``, ``#STOP``, ``#STP``, ``#LNTYPE``, ``#LNOBJ``, ``#LNMODE``, ``#OCT/FP``, ``#WAV``, ``#BMP``, ``#SCROLL``, ``#SPEED``
+    ``#PLAYER``， ``#RANK``， ``#DEFEXRANK``， ``#EXRANK``， ``#TOTAL``， ``#VOLWAV``， ``STAGEFILE``， ``#BANNER``， ``#BACKBMP``，``#CHARFILE``， ``#PLAYLEVEL``， ``#DIFFICULTY``， ``#TITLE``， ``#SUBTITLE``， ``#ARTIST``， ``#SUBARTIST``， ``#MAKER``， ``#GENRE``， ``#COMMENT``， ``#TEXT``， ``#SONG``， ``#BPM``， ``#EXBPM``， ``#BASEBPM``， ``#STOP``， ``#STP``， ``#LNTYPE``， ``#LNOBJ``， ``#LNMODE``， ``#OCT/FP``， ``#WAV``， ``#BMP``， ``#SCROLL``， ``#SPEED``
 - 支持通道
   - ``01``(BGM Channel)
   - ``02``(Measure Length)
@@ -29,7 +29,7 @@
 ## 计划
 
 - 更多命令支持
-  - ``#OPTION``, ``#CHANGEOPTION``, ``#WAVCMD``, ``#EXWAV``, ``#CDDA``, ``#MIDIFILE``, ``#EXBMP``, ``#BGA``, ``#@BGA``, ``#POORBGA``, ``#SWBGA``, ``#ARGB``, ``#VIDEOFILE``, ``#VIDEOf/s``, ``#VIDEOCOLORS``, ``#VIDEODLY``, ``#MOVIE``, ``#SEEK``, ``#ExtChr``, ``#MATERIALSWAV``, ``#MATERIALSBMP``, ``#DIVIDEPROP``, ``#CHARSET``, etc...
+  - ``#OPTION``， ``#CHANGEOPTION``， ``#WAVCMD``， ``#EXWAV``， ``#CDDA``， ``#MIDIFILE``， ``#EXBMP``， ``#BGA``， ``#@BGA``， ``#POORBGA``， ``#SWBGA``， ``#ARGB``， ``#VIDEOFILE``， ``#VIDEOf/s``， ``#VIDEOCOLORS``， ``#VIDEODLY``， ``#MOVIE``， ``#SEEK``， ``#ExtChr``， ``#MATERIALSWAV``， ``#MATERIALSBMP``， ``#DIVIDEPROP``， ``#CHARSET``, etc...
 - 通道悬停信息
 - 添加片段
 - 添加衬垫
